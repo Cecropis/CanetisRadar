@@ -78,20 +78,23 @@ namespace CanetisRadar
             {
                 float lefttop = device.AudioMeterInformation.PeakValues[0];
                 float righttop = device.AudioMeterInformation.PeakValues[1];
+                float midTop = device.AudioMeterInformation.PeakValues[2];
                 float leftbottom = device.AudioMeterInformation.PeakValues[4];
                 float rightbottom = device.AudioMeterInformation.PeakValues[5];
 
-                var tempone = lefttop * multiplier;
-                var temptwo = righttop * multiplier;
+                var xyCompLT = lefttop * multiplier;
+                var xyCompRT = righttop * multiplier;
 
-                var tempthree = leftbottom * multiplier;
-                var tempfour = rightbottom * multiplier;
+                var yCompMT = midTop * multiplier;
 
-                var x = 75 - tempone + temptwo;
-                var y = 75 - tempone - temptwo;
+                var xyCompLB = leftbottom * multiplier;
+                var xyCompRB = rightbottom * multiplier;
 
-                x = x - tempthree + tempfour;
-                y = y + tempthree + tempfour;
+                var x = 75 - xyCompLT + xyCompRT;
+                var y = 75 - xyCompLT - xyCompRT - yCompMT;
+
+                x = x - xyCompLB + xyCompRB;
+                y = y + xyCompLB + xyCompRB;
 
                 if (y < 10)
                 {
@@ -137,6 +140,11 @@ namespace CanetisRadar
             pictureBox1.Invoke((MethodInvoker)delegate {
                 pictureBox1.Image = radar;
             });
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
