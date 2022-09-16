@@ -90,29 +90,21 @@ namespace CanetisRadar
                 var xyCompLB = leftbottom * multiplier;
                 var xyCompRB = rightbottom * multiplier;
 
-                var x = 75 - xyCompLT + xyCompRT;
-                var y = 75 - xyCompLT - xyCompRT - yCompMT;
+                var x =  - xyCompLT + xyCompRT;
+                var y =  - xyCompLT - xyCompRT - yCompMT;
 
                 x = x - xyCompLB + xyCompRB;
                 y = y + xyCompLB + xyCompRB;
 
-                if (y < 10)
+                int r = (int)Math.Sqrt(x * x + y * y);
+                if(r > 70)
                 {
-                    y = 10;
-                }
-                if (x < 10)
-                {
-                    x = 10;
+                    x = x * 70 / r;
+                    y = y * 70 / r;
                 }
 
-                if (y > 140)
-                {
-                    y = 140;
-                }
-                if (x > 140)
-                {
-                    x = 140;
-                }
+                x = x + 75;
+                y = y + 75;
 
                 string infotext = "";
                 for (int i = 0; i < device.AudioMeterInformation.PeakValues.Count; i++)
@@ -133,18 +125,25 @@ namespace CanetisRadar
         {
             Bitmap radar = new Bitmap(150, 150);
             Graphics grp = Graphics.FromImage(radar);
-            grp.FillRectangle(Brushes.Black, 0, 0, radar.Width, radar.Height);
+            Pen whitePen = new Pen(Color.DarkGray, 1);
+            Pen redPen = new Pen(Color.Red, 3);
+            
+            grp.FillEllipse(Brushes.Black, 0, 0, radar.Width, radar.Height);
+            
+            grp.DrawLine(whitePen, 22, 22, 128, 128);
+            grp.DrawLine(whitePen, 0, 75, 150, 75);
+            grp.DrawLine(whitePen, 75, 0, 75, 150);
+            grp.DrawLine(whitePen, 22, 128, 128, 22);
+            grp.FillEllipse(Brushes.Red, x - 5, y - 5, 10, 10);
+            grp.DrawLine(redPen, 75, 75, x, y);
 
-            grp.FillRectangle(Brushes.Red, x - 5, y - 5, 10, 10);
+
+
 
             pictureBox1.Invoke((MethodInvoker)delegate {
                 pictureBox1.Image = radar;
             });
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
