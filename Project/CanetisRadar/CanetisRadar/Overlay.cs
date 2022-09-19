@@ -91,17 +91,25 @@ namespace CanetisRadar
                 var xyCompRB = rightbottom * multiplier;
 
                 var x =  - xyCompLT + xyCompRT;
-                var y =  - xyCompLT - xyCompRT - yCompMT;
+                var y =  - xyCompLT - xyCompRT - (float)(yCompMT / 2.0);
 
                 x = x - xyCompLB + xyCompRB;
                 y = y + xyCompLB + xyCompRB;
 
-                int r = (int)Math.Sqrt(x * x + y * y);
-                if(r > 70)
-                {
-                    x = x * 70 / r;
-                    y = y * 70 / r;
-                }
+                var magnitude = xyCompLT + xyCompRT + (float)(yCompMT / 2.0) + xyCompLB + xyCompRB;
+
+                var r = (float)Math.Sqrt(x * x + y * y);
+                if (r < 1)
+                    r = 1;
+
+                x = x / r;
+                y = y / r;
+
+                if(magnitude > 70)
+                    magnitude = 70;
+
+                x = x * magnitude;
+                y = y * magnitude;
 
                 x = x + 75;
                 y = y + 75;
